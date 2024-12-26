@@ -1,0 +1,35 @@
+name: podhoard
+
+services:
+  pgsql:
+    image: postgres:17.2-bookworm
+    container_name: podhoard_pqsql
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: changeme
+      POSTGRES_DB: podhoard
+    volumes:
+      - pgsql_data:/var/lib/postgresql/data # Persistent storage for PostgreSQL database
+
+  app:
+    image: hoardertools/podhoard
+    restart: unless-stopped
+    depends_on:
+      - pgsql
+    container_name: podhoard_app
+    ports:
+      - "8123:80"
+    environment:
+      POSTGRES_HOST: pgsql
+      POSTGRES_DB: podhoard
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: changeme
+    volumes:
+      - app_config:/app/config # Persistent storage for app configuration
+      # - /podcasts:/podcasts # Example: Mount a directory containing podcasts
+    links:
+      - pgsql
+
+volumes:
+  pgsql_data:
+  app_config:
