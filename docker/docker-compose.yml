@@ -12,7 +12,7 @@ services:
       - pgsql_data:/var/lib/postgresql/data # Persistent storage for PostgreSQL database
 
   app:
-    image: hoardertools/podhoard
+    image: ghcr.io/hoardertools/podhoard:latest
     restart: unless-stopped
     depends_on:
       - pgsql
