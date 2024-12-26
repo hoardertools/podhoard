@@ -187,7 +187,15 @@ $libraries = [];
 				<a href="javascript:;" class="app-sidebar-minify-btn ms-auto" data-toggle="app-sidebar-minify"><i class="fa fa-angle-double-left"></i></a>
 			</div>
 			<!-- END minify-button -->
-		
+				<div class="menu-header">
+					Version:<br>
+					{{ config('version.tag') }}<br>
+					Commit Hash:<br>
+					{{ config('version.hash') }}<br>
+					Build time:<br>
+					{{ config('version.date') }}
+				</div>
+
 		</div>
 		<!-- END menu -->
 	</div>
