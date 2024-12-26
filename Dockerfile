@@ -38,6 +38,8 @@ RUN apt-get -qq update \
     libzip-dev \
     libonig-dev \
     git \
+    zip \
+    unzip \
     libicu-dev\
     libxslt-dev \
     supervisor
@@ -48,6 +50,7 @@ RUN docker-php-ext-configure bcmath && docker-php-ext-install bcmath
 RUN docker-php-ext-configure opcache && docker-php-ext-install opcache
 RUN docker-php-ext-configure intl && docker-php-ext-install intl
 RUN docker-php-ext-configure xsl && docker-php-ext-install xsl
+RUN docker-php-ext-configure zip && docker-php-ext-install zip
 
 RUN sed -i \
         -e "s/;listen.mode = 0660/listen.mode = 0666/g" \
