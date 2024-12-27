@@ -133,8 +133,8 @@ class LibraryController extends Controller
         $feed->setUpdateFrequency(1);
         $feed->setLanguage('en-US');
         $feed->setItunesCategories('General');
-        $feed->setItunesImage("http://podhoard.external.jag.digital/getRssPodcastCover/" . $podcast->id . "/" . $key  );
-        $feed->setImage("http://podhoard.external.jag.digital/getRssPodcastCover/" . $podcast->id . "/" . $key  ); // min 1400 x 1400 pixel
+        $feed->setItunesImage(getenv("APP_URL") . "/getRssPodcastCover/" . $podcast->id . "/" . $key  );
+        $feed->setImage(getenv("APP_URL") . "/getRssPodcastCover/" . $podcast->id . "/" . $key  ); // min 1400 x 1400 pixel
 
         foreach($podcast->episodes()->orderBy("published_at", "DESC")->get() as $episode) {
 
@@ -144,9 +144,9 @@ class LibraryController extends Controller
             $feedItem->setPublishDate(new \DateTime($episode->published_at));
             $feedItem->setMediaSize($episode->filesize);
             $feedItem->setMediaDuration($episode->duration);
-            $feedItem->setItunesImage("http://podhoard.external.jag.digital/getRssPodcastCover/" . $podcast->id . "/" . $key  );
+            $feedItem->setItunesImage(getenv("APP_URL") . "/getRssPodcastCover/" . $podcast->id . "/" . $key  );
             $feedItem->setMediaMimeType('audio/mp3');
-            $feedItem->setMediaUrl('http://podhoard.external.jag.digital/downloadRssFile/' . $episode->id . '/' . $podcast->rss_access_key . '/' . str_replace(" ", "_", basename($episode->path)));
+            $feedItem->setMediaUrl(getenv("APP_URL") . '/downloadRssFile/' . $episode->id . '/' . $podcast->rss_access_key . '/' . str_replace(" ", "_", basename($episode->path)));
             $feed->addItem($feedItem);
 
         }
