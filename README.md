@@ -47,4 +47,5 @@ The container will automatically run the database migrations and seed the databa
 - The docker container does not have SSL/TLS configured. It is recommended to use a reverse proxy with SSL/TLS termination in front of the container.
 - Make sure to update the default user password after logging in for the first time.
 - Please add local persistent storage for the podcast files. In the docker-compose file, these can be added under services->app->volumes.
+- Update the APP_URL value in docker-compose.yml to match the URL you will be using to access the application. If not done correctly the RSS feeds **will not work.**
 

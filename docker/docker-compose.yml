@@ -20,6 +20,7 @@ services:
     ports:
       - "8123:80"
     environment:
+      APP_URL: http://my.podhoard.domain
       POSTGRES_HOST: pgsql
       POSTGRES_DB: podhoard
       POSTGRES_USER: postgres
