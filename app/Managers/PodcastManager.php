@@ -47,6 +47,8 @@ class PodcastManager
         }
 
         $this->podcast->total_episodes = $this->podcast->episodes()->count();
+        $this->podcast->last_scanned_at = now();
+        $this->podcast->save();
         return true;
     }
 
@@ -165,6 +167,7 @@ class PodcastManager
         }
 
     }
+
 
     public function refresh(){
 
