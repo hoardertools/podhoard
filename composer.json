@@ -6,7 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "goncziakos/podcast-feed": "dev-master",
+        "goncziakos/podcast-feed": "v1.0.0",
         "kiwilan/php-audio": "^4.0",
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
@@ -32,9 +32,9 @@
             "type": "package",
             "package": {
                 "name": "goncziakos/podcast-feed",
-                "version": "master",
+                "version": "v1.0.0",
                 "dist": {
-                    "url": "https://github.com/hoardertools/dep-podcast-feed/archive/refs/heads/master.zip",
+                    "url": "https://github.com/hoardertools/dep-podcast-feed/archive/refs/tags/v1.0.0.zip",
                     "type": "zip"
                 }
             }
