@@ -53,6 +53,10 @@
                         <input type="password" class="form-control fs-13px h-45px border-0" placeholder="Password" id="password" name="password" />
                         <label for="password" class="d-flex align-items-center text-gray-600 fs-13px">Password</label>
                     </div>
+                    <div class="form-group mb-3">
+                        <label for="remember">Remember me</label>
+                        <input type="checkbox" name="remember" value="1">
+                    </div>
                     <div class="mb-20px">
                         <button type="submit" class="btn btn-theme d-block w-100 h-45px btn-lg">Sign me in</button>
                     </div>
