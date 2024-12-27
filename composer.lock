@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "994b3fb481198e6862452afe061cac2f",
+    "content-hash": "988887e98641717884bd0b382b1ffd6e",
     "packages": [
         {
             "name": "azjezz/psl",
@@ -658,12 +658,53 @@
         },
         {
             "name": "goncziakos/podcast-feed",
-            "version": "v1.0.0",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "git@gitlab.com:goncziakos/podcast-feed.git",
+                "reference": "c1f0a3d61f2c9ecfd36fd7550d11fb8f387cdb26"
+            },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/hoardertools/dep-podcast-feed/archive/refs/tags/v1.0.0.zip"
+                "url": "https://gitlab.com/api/v4/projects/goncziakos%2Fpodcast-feed/repository/archive.zip?sha=c1f0a3d61f2c9ecfd36fd7550d11fb8f387cdb26",
+                "reference": "c1f0a3d61f2c9ecfd36fd7550d11fb8f387cdb26",
+                "shasum": ""
             },
-            "type": "library"
+            "require": {
+                "ext-dom": "*",
+                "php": ">=7.4",
+                "silverorange/castanet": "^2.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "GoncziAkos\\Podcast\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Gönczi Ákos",
+                    "email": "goncziakos@gmail.com"
+                }
+            ],
+            "description": "Generate RSS feed for podcast, including iTunes, RawVoice, DublinCore and syndication fields.",
+            "keywords": [
+                "DublinCore",
+                "Syndication",
+                "feed",
+                "itunes",
+                "podcast",
+                "rawvoice",
+                "rss"
+            ],
+            "time": "2023-02-06T08:42:38+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -3737,6 +3778,69 @@
                 }
             ],
             "time": "2024-08-03T13:50:05+00:00"
+        },
+        {
+            "name": "silverorange/castanet",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/silverorange/Castanet.git",
+                "reference": "5e326f5d938ec43aa97fea84d76796b69a7000dd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/silverorange/Castanet/zipball/5e326f5d938ec43aa97fea84d76796b69a7000dd",
+                "reference": "5e326f5d938ec43aa97fea84d76796b69a7000dd",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "php": ">=5.2.1"
+            },
+            "require-dev": {
+                "silverorange/coding-standard": "^0.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Castanet": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Gauthier",
+                    "email": "mike@silverorange.com"
+                },
+                {
+                    "name": "Charles Waddell",
+                    "email": "charles@silverorange.com"
+                },
+                {
+                    "name": "Isaac Grant",
+                    "email": "isaac@silverorange.com"
+                },
+                {
+                    "name": "Nick Burka",
+                    "email": "nick@silverorange.com"
+                }
+            ],
+            "description": "Podcast feed generation including iTunes-specific fields.",
+            "homepage": "https://github.com/silverorange/Castanet",
+            "keywords": [
+                "feed",
+                "itunes",
+                "podcast",
+                "rss"
+            ],
+            "support": {
+                "issues": "https://github.com/silverorange/Castanet/issues",
+                "source": "https://github.com/silverorange/Castanet"
+            },
+            "time": "2017-07-31T14:53:58+00:00"
         },
         {
             "name": "spatie/array-to-xml",
