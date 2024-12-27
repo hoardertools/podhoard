@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
          $schedule->command('app:rescan-library')->daily();
-         $schedule->command('app:rescan-rss-feeds')->everyFiveMinutes();
+         $schedule->command('app:rescan-rss-feeds')->everyThirtyMinutes();
     }
 
     /**
