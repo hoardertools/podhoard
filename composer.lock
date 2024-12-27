@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b5aadbbff34d292d59d04c993c9e5054",
+    "content-hash": "994b3fb481198e6862452afe061cac2f",
     "packages": [
         {
             "name": "azjezz/psl",
@@ -658,10 +658,10 @@
         },
         {
             "name": "goncziakos/podcast-feed",
-            "version": "master",
+            "version": "v1.0.0",
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/hoardertools/dep-podcast-feed/archive/refs/heads/master.zip"
+                "url": "https://github.com/hoardertools/dep-podcast-feed/archive/refs/tags/v1.0.0.zip"
             },
             "type": "library"
         },
@@ -8580,9 +8580,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "goncziakos/podcast-feed": 20
-    },
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
