@@ -43,6 +43,9 @@ class RefreshRssJob implements ShouldQueue
                     $download->download_url = $episode->enclosure->url;
                     $download->guid = $episode->guid;
                     $download->path='';
+                    $download->duration = 0;
+                    $download->filesize = 0;
+
                     $download->save();
                 }
 
