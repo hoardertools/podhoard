@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# Early itterations used a file driver for sessions. This bit of code will replace the file driver with the database driver.
+if [ -f "/app/config/.env" ]; then
+  # Check if SESSION_DRIVER=file exists in the file
+  if grep -q "SESSION_DRIVER=file" "/app/config/.env"; then
+    # Replace SESSION_DRIVER=file with SESSION_DRIVER=database
+    sed -i 's/SESSION_DRIVER=file/SESSION_DRIVER=database/' "/app/config/.env"
+  fi
+fi
+
 # Seed the .env file if there is no file present
 if [ ! -f "/app/config/.env" ]; then
   cat /podhoard/.env.example > /podhoard/.env
