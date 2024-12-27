@@ -39,7 +39,7 @@ class RefreshRssJob implements ShouldQueue
                     $download->directory_id = $this->podcast->directory_id;
                     $download->podcast_id = $this->podcast->id;
                     $download->downloaded = false;
-                    $download->downloaded_at = Carbon::parse('0000-00-00 00:00:00');
+                    $download->downloaded_at = Carbon::parse('1990-01-01 00:00:00');
                     $download->download_url = $episode->enclosure->url;
                     $download->guid = $episode->guid;
                     $download->path='';
