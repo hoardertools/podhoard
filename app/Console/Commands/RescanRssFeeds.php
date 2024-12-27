@@ -28,7 +28,7 @@ class RescanRssFeeds extends Command
      */
     public function handle()
     {
-        foreach(Podcast::whereNotNull('rss_feed')->get() as $podcast){
+        foreach(Podcast::whereNotNull('rssUrl')->get() as $podcast){
 
             RefreshRssJob::dispatch($podcast);
 
