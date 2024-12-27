@@ -133,8 +133,8 @@ class LibraryController extends Controller
         $feed->setUpdateFrequency(1);
         $feed->setLanguage('en-US');
         $feed->setItunesCategories('General');
-        $feed->setItunesImage(env("APP_URL") . "/getRssPodcastCover/" . $podcast->id . "/" . $key  );
-        $feed->setImage(env("APP_URL") . "/getRssPodcastCover/" . $podcast->id . "/" . $key  ); // min 1400 x 1400 pixel
+        $feed->setItunesImage(config("url") . "/getRssPodcastCover/" . $podcast->id . "/" . $key  );
+        $feed->setImage(config("url") . "/getRssPodcastCover/" . $podcast->id . "/" . $key  ); // min 1400 x 1400 pixel
 
         foreach($podcast->episodes()->orderBy("published_at", "DESC")->get() as $episode) {
 
@@ -144,9 +144,9 @@ class LibraryController extends Controller
             $feedItem->setPublishDate(new \DateTime($episode->published_at));
             $feedItem->setMediaSize($episode->filesize);
             $feedItem->setMediaDuration($episode->duration);
-            $feedItem->setItunesImage(env("APP_URL") . "/getRssPodcastCover/" . $podcast->id . "/" . $key  );
+            $feedItem->setItunesImage(config("url") . "/getRssPodcastCover/" . $podcast->id . "/" . $key  );
             $feedItem->setMediaMimeType('audio/mp3');
-            $feedItem->setMediaUrl(env("APP_URL") . '/downloadRssFile/' . $episode->id . '/' . $podcast->rss_access_key . '/' . str_replace(" ", "_", basename($episode->path)));
+            $feedItem->setMediaUrl(config("url") . '/downloadRssFile/' . $episode->id . '/' . $podcast->rss_access_key . '/' . str_replace(" ", "_", basename($episode->path)));
             $feed->addItem($feedItem);
 
         }
