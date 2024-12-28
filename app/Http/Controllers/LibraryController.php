@@ -219,7 +219,7 @@ class LibraryController extends Controller
 
 
             $description = $poddle->xmlReader->value("rss.channel.description")->first();
-            $name = $poddle->xmlReader->value("rss.channel.name")->first();
+            $name = $poddle->xmlReader->value("rss.channel.title")->first();
         }catch (\TypeError $e){
             \Log::error("Failed to add podcast: " . $rss . PHP_EOL . "Error: " . $e->getMessage());
             exit(-1);
