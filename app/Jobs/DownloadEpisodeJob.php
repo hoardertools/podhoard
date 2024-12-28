@@ -54,14 +54,14 @@ class DownloadEpisodeJob implements ShouldQueue
 
             $podcast = Podcast::findOrFail($episode->podcast_id);
 
-            if(!\Storage::disk('base')->exists($podcast->path)){
-                \Storage::disk('base')->makeDirectory($podcast->path);
-                chmod($podcast->path , 0755);
+            if(!\Storage::disk('base')->exists($this->sanitizeFileName($podcast->path))){
+                \Storage::disk('base')->makeDirectory($this->sanitizeFileName($podcast->path));
+                chmod($this->sanitizeFileName($podcast->path) , 0755);
             }
 
-            if(\Storage::disk('base')->put($podcast->path . "/" . \Illuminate\Support\Str::slug($episode->title) . "." . $episode->id . ".mp3", $download)){
+            if(\Storage::disk('base')->put($this->sanitizeFileName($podcast->path) . "/" . \Illuminate\Support\Str::slug($episode->title) . "." . $episode->id . ".mp3", $download)){
                 $episode->downloaded = true;
-                $episode->path = $podcast->path . "/" . \Illuminate\Support\Str::slug($episode->title) . "." . $episode->id . ".mp3";
+                $episode->path = $this->sanitizeFileName($podcast->path) . "/" . \Illuminate\Support\Str::slug($episode->title) . "." . $episode->id . ".mp3";
                 chmod($episode->path , 0755);
 
 
@@ -92,5 +92,29 @@ class DownloadEpisodeJob implements ShouldQueue
             DownloadEpisodeJob::dispatch()->onQueue("downloads");
 
         }
+    }
+
+    function sanitizeFileName(string $name, int $maxLength = 255): string
+    {
+        // Remove leading and trailing whitespace
+        $sanitized = trim($name);
+
+        // Replace invalid characters with an underscore
+        $sanitized = preg_replace('/[^a-zA-Z0-9\-_\.]/u', '_', $sanitized);
+
+        // Prevent multiple underscores from consecutive invalid characters
+        $sanitized = preg_replace('/_+/', '_', $sanitized);
+
+        // Limit the length of the name to the specified maximum
+        if (strlen($sanitized) > $maxLength) {
+            $sanitized = substr($sanitized, 0, $maxLength);
+        }
+
+        // Ensure the name is not empty (use "default" if the sanitized name is empty)
+        if (empty($sanitized)) {
+            $sanitized = 'default';
+        }
+
+        return $sanitized;
     }
 }
