@@ -39,7 +39,16 @@ class MetadataManager
             if (strlen($value) > 0) {
 
                 if(in_array($key, $episodeMetaData)){
-                    $this->episode->{$key} = $value ?? '';
+
+                    //Don't override existing / RSS metadata
+                    if($key == 'published_at'){
+                        if($this->episode->published_at == null){
+                            $this->episode->published_at = $value;
+                        }
+                    }else{
+                        $this->episode->{$key} = $value ?? '';
+                    }
+
                 }else{
                     if (!isset($existingMetadata[$this->episode->id][$key])) {
                         $metadata = new Metadata();
