@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Directory;
+use App\Download;
 use App\Episode;
 use App\Podcast;
 use Illuminate\Bus\Queueable;
@@ -22,14 +23,15 @@ class DownloadEpisodeJob implements ShouldQueue
 
     public function handle(): void
     {
-        if(Episode::where("downloaded", "=", false)->whereNotNull("download_url")->orderBy("created_at", "ASC")->exists()){
+        if(Download::orderBy("created_at", "ASC")->exists()){
 
-            $episode = Episode::where("downloaded", "=", false)->whereNotNull("download_url")->orderBy("created_at", "ASC")->first();
+            $episode = Download::orderBy("created_at", "ASC")->first();
 
             try{
                 $download = file_get_contents($episode->download_url);
             }catch (\Exception $e){
                 unset($e);
+                \Log::error("Failed to download episode: " . $episode->id);
                 $episode->delete();
                 DownloadEpisodeJob::dispatch();
             }
