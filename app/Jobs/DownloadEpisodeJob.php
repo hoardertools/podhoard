@@ -33,9 +33,10 @@ class DownloadEpisodeJob implements ShouldQueue
                 $download = file_get_contents($episode->download_url);
             }catch (\Exception $e){
                 unset($e);
-                \Log::error("Failed to download episode: " . $episode->id);
+                \Log::error("Failed to download episode: " . $episode->id . PHP_EOL . "Error: " . $e->getMessage());
                 $episode->delete();
                 DownloadEpisodeJob::dispatch();
+                exit(-1);
             }
 
             $podcast = Podcast::findOrFail($episode->podcast_id);
@@ -66,7 +67,7 @@ class DownloadEpisodeJob implements ShouldQueue
 
                 $meta = new EpisodeManager($newEpisode);
                 $meta->setMetaData();
-                
+
                 $podcastManager = new PodcastManager($podcast);
                 $podcastManager->refresh();
 
