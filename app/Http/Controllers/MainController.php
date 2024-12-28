@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Download;
 use App\Episode;
 
 class MainController extends Controller {
@@ -16,7 +17,7 @@ class MainController extends Controller {
     public function downloadQueue()
     {
         return view('pages.download-queue')->with([
-            'downloadQueue' => Episode::where("downloaded", "=", false)->whereNotNull("download_url")->orderBy("created_at", "ASC")->get()
+            'downloadQueue' => Download::orderBy("created_at", "ASC")->get()
         ]);
     }
 }
