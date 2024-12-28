@@ -201,8 +201,7 @@ class LibraryController extends Controller
             $poddle = Poddle::fromUrl($rss);
             $channel = $poddle->getChannel(true);
         }catch (\TypeError $e){
-            print_r($e);
-            exit;
+            \Log::error("Failed to add podcast: " . $rss . PHP_EOL . "Error: " . $e->getMessage());
             return false;
         }
 
@@ -217,7 +216,7 @@ class LibraryController extends Controller
         $podcast->total_playtime = 0;
         $podcast->total_episodes = 0;
         $podcast->total_size = 0;
-            $podcast->description = $channel->description;
+        $podcast->description = $channel->description;
         $podcast->latest_addition_at = now();
 
         if(Podcast::where("library_id", "=", $library->id)->where("rssUrl", "=", $rss)->exists()){
@@ -234,10 +233,9 @@ class LibraryController extends Controller
             $image->library_id = $library->id;
             $image->podcast_id = $podcast->id;
             $image->save();
+            $podcast->image_id = $image->id;
+            $podcast->save();
         }
-
-        $podcast->image_id = $image->id;
-        $podcast->save();
 
         RefreshRssJob::dispatch($podcast);
         return $podcast;
