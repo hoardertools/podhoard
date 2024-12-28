@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Directory;
 use App\Download;
 use App\Episode;
+use App\Managers\PodcastManager;
 use App\Podcast;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -48,10 +49,15 @@ class DownloadEpisodeJob implements ShouldQueue
                 $episode->path = $podcast->path . "/" . \Illuminate\Support\Str::slug($episode->title) . "." . $episode->id . ".mp3";
                 chmod($episode->path , 0755);
 
+                $podcastManager = new PodcastManager($podcast);
+                $podcastManager->refresh();
+
+
                 $episode->delete();
             }
 
-            RefreshPodcastJob::dispatch($podcast);
+
+
             DownloadEpisodeJob::dispatch()->onQueue("downloads");
 
         }
