@@ -17,6 +17,7 @@ use PhanAn\Poddle\Poddle;
 use Saloon\XmlWrangler\Exceptions\QueryAlreadyReadException;
 use Saloon\XmlWrangler\Exceptions\XmlReaderException;
 use VeeWee\Xml\Encoding\Exception\EncodingException;
+use VeeWee\Xml\Exception\RuntimeException;
 
 class LibraryController extends Controller
 {
@@ -214,25 +215,30 @@ class LibraryController extends Controller
                 $xml = file_get_contents($rss);
             }
 
-            $poddle = Poddle::fromXml($rss);
+            $poddle = Poddle::fromXml($xml);
 
+
+            $description = $poddle->xmlReader->value("rss.channel.description")->first();
+            $name = $poddle->xmlReader->value("rss.channel.name")->first();
         }catch (\TypeError $e){
             \Log::error("Failed to add podcast: " . $rss . PHP_EOL . "Error: " . $e->getMessage());
             exit(-1);
         }
 
+
+
         $podcast = new Podcast();
-        $podcast->name = preg_replace('/^\s+|\s+$/u', '', $channel->title);
+        $podcast->name = preg_replace('/^\s+|\s+$/u', '', $name);
         $podcast->rssUrl = $rss;
         $podcast->library_id = $library->id;
         $podcast->last_scanned_at = now();
         $podcast->last_rss_scanned_at = now();
-        $podcast->path = $directory->path . "/" . $channel->title;
+        $podcast->path = $directory->path . "/" . preg_replace('/^\s+|\s+$/u', '', $name);
         $podcast->directory_id = $directory->first()->id;
         $podcast->total_playtime = 0;
         $podcast->total_episodes = 0;
         $podcast->total_size = 0;
-        $podcast->description = $channel->description;
+        $podcast->description = $description;
         $podcast->latest_addition_at = now();
 
         if(Podcast::where("library_id", "=", $library->id)->where("rssUrl", "=", $rss)->exists()){
@@ -240,6 +246,7 @@ class LibraryController extends Controller
         }
 
         if(empty($podcast->name)){
+
             \Log::error("Failed to add podcast. No name found: " . $rss . PHP_EOL);
             exit(-1);
         }
@@ -247,30 +254,22 @@ class LibraryController extends Controller
         RefreshRssJob::dispatch($podcast);
         try{
             $channel = $poddle->getChannel();
-        } catch (QueryAlreadyReadException $e) {
-            unset($e);
-            return $podcast;
-        } catch (XmlReaderException $e) {
-            unset($e);
-            return $podcast;
-        } catch (EncodingException $e) {
-            unset($e);
-            return $podcast;
-        } catch (\Throwable $e) {
-            unset($e);
+            if($channel->image) {
+                $image = new Image();
+                $image->base64 = base64_encode(file_get_contents($channel->image));
+                $image->type = "Podcast";
+                $image->directory_id = $directory->id;
+                $image->library_id = $library->id;
+                $image->podcast_id = $podcast->id;
+                $image->save();
+                $podcast->image_id = $image->id;
+                $podcast->save();
+            }
+        }catch (\TypeError|RuntimeException $e){
             return $podcast;
         }
-        if($channel->image) {
-            $image = new Image();
-            $image->base64 = base64_encode(file_get_contents($channel->image));
-            $image->type = "Podcast";
-            $image->directory_id = $directory->id;
-            $image->library_id = $library->id;
-            $image->podcast_id = $podcast->id;
-            $image->save();
-            $podcast->image_id = $image->id;
-            $podcast->save();
-        }
+
+
 
 
         return $podcast;
