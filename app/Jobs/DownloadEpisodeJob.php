@@ -50,7 +50,7 @@ class DownloadEpisodeJob implements ShouldQueue
             }
 
             RefreshPodcastJob::dispatch($podcast);
-            DownloadEpisodeJob::dispatch();
+            DownloadEpisodeJob::dispatch()->onQueue("downloads");
 
         }
     }
