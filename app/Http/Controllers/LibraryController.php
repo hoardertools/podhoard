@@ -14,6 +14,9 @@ use GoncziAkos\Podcast\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use PhanAn\Poddle\Poddle;
+use Saloon\XmlWrangler\Exceptions\QueryAlreadyReadException;
+use Saloon\XmlWrangler\Exceptions\XmlReaderException;
+use VeeWee\Xml\Encoding\Exception\EncodingException;
 
 class LibraryController extends Controller
 {
@@ -212,7 +215,7 @@ class LibraryController extends Controller
             }
 
             $poddle = Poddle::fromXml($rss);
-            $channel = $poddle->getChannel(true);
+
         }catch (\TypeError $e){
             \Log::error("Failed to add podcast: " . $rss . PHP_EOL . "Error: " . $e->getMessage());
             exit(-1);
@@ -241,7 +244,22 @@ class LibraryController extends Controller
             exit(-1);
         }
         $podcast->save();
-
+        RefreshRssJob::dispatch($podcast);
+        try{
+            $channel = $poddle->getChannel();
+        } catch (QueryAlreadyReadException $e) {
+            unset($e);
+            return $podcast;
+        } catch (XmlReaderException $e) {
+            unset($e);
+            return $podcast;
+        } catch (EncodingException $e) {
+            unset($e);
+            return $podcast;
+        } catch (\Throwable $e) {
+            unset($e);
+            return $podcast;
+        }
         if($channel->image) {
             $image = new Image();
             $image->base64 = base64_encode(file_get_contents($channel->image));
@@ -254,7 +272,7 @@ class LibraryController extends Controller
             $podcast->save();
         }
 
-        RefreshRssJob::dispatch($podcast);
+
         return $podcast;
 
     }
