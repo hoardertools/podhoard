@@ -96,8 +96,8 @@ class DownloadEpisodeJob implements ShouldQueue
 
     function sanitizeFileName(string $name, int $maxLength = 255): string
     {
-        // Remove leading and trailing whitespace
-        $sanitized = trim($name);
+        // Remove leading and trailing whitespace, tabs, and linebreaks
+        $sanitized = preg_replace('/^\s+|\s+$/u', '', $name);
 
         // Replace invalid characters with an underscore
         $sanitized = preg_replace('/[^a-zA-Z0-9\-_\.]/u', '_', $sanitized);

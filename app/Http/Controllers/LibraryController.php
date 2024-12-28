@@ -219,7 +219,7 @@ class LibraryController extends Controller
         }
 
         $podcast = new Podcast();
-        $podcast->name = $channel->title;
+        $podcast->name = preg_replace('/^\s+|\s+$/u', '', $channel->title);
         $podcast->rssUrl = $rss;
         $podcast->library_id = $library->id;
         $podcast->last_scanned_at = now();
@@ -236,6 +236,10 @@ class LibraryController extends Controller
             return true;
         }
 
+        if(empty($podcast->name)){
+            \Log::error("Failed to add podcast. No name found: " . $rss . PHP_EOL);
+            exit(-1);
+        }
         $podcast->save();
 
         if($channel->image) {
