@@ -35,6 +35,12 @@ class create_global_permissionsSeeder extends Seeder
             $setting->value = "grid";
             $setting->save();
         }
+        if(!Setting::where("key", "CustomUserAgent")->exists()){
+            $setting = new Setting();
+            $setting->key = "CustomUserAgent";
+            $setting->value = "";
+            $setting->save();
+        }
 
     }
 }

@@ -195,14 +195,27 @@ class LibraryController extends Controller
 
     public function addNewPodcast($rss, $library){
 
+
         $directory = $library->directories()->first();
 
         try{
-            $poddle = Poddle::fromUrl($rss);
+            if(Setting::where("key", "CustomUserAgent")->where("value", "!=", "")->exists()){
+                $opts = [
+                    "http" => [
+                        "header" => "User-Agent: " . Setting::where("key", "CustomUserAgent")->first()->value
+                    ]
+                ];
+                $context = stream_context_create($opts);
+                $xml = file_get_contents($rss, false, $context);
+            }else{
+                $xml = file_get_contents($rss);
+            }
+
+            $poddle = Poddle::fromXml($rss);
             $channel = $poddle->getChannel(true);
         }catch (\TypeError $e){
             \Log::error("Failed to add podcast: " . $rss . PHP_EOL . "Error: " . $e->getMessage());
-            return false;
+            exit(-1);
         }
 
         $podcast = new Podcast();

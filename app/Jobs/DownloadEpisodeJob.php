@@ -8,6 +8,7 @@ use App\Episode;
 use App\Managers\EpisodeManager;
 use App\Managers\PodcastManager;
 use App\Podcast;
+use App\Setting;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -30,7 +31,18 @@ class DownloadEpisodeJob implements ShouldQueue
             $episode = Download::orderBy("created_at", "ASC")->first();
 
             try{
-                $download = file_get_contents($episode->download_url);
+                if(Setting::where("key", "CustomUserAgent")->where("value", "!=", "")->exists()){
+                    $opts = [
+                        "http" => [
+                            "header" => "User-Agent: " . Setting::where("key", "CustomUserAgent")->first()->value
+                        ]
+                    ];
+                    $context = stream_context_create($opts);
+                    $download = file_get_contents($episode->download_url, false, $context);
+                }else{
+                    $download = file_get_contents($episode->download_url);
+                }
+
             }catch (\Exception $e){
 
                 \Log::error("Failed to download episode: " . $episode->id . PHP_EOL . "Error: " . $e->getMessage());

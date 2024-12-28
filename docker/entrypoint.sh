@@ -35,6 +35,7 @@ service cron start
 php artisan migrate
 php artisan db:seed
 
+touch /podhoard/storage/logs/laravel.log
 # Set permissions for logging folder
 chmod -R 777 /podhoard/storage
 
