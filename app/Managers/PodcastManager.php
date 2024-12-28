@@ -156,7 +156,7 @@ class PodcastManager
             Episode::upsert($chuck, ["id"], ["metadata_set", "description", "title", "published_at", "duration", "filesize"]);
         }
 
-        foreach($this->podcast->episodes()->where("downloaded", "=", true)->get() as $episode) {
+        foreach($this->podcast->episodes()->get() as $episode) {
 
             if ($episode->duration == 0 or $episode->filesize == 0) {
                 $audio = Audio::read($episode->path);
