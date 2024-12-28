@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Console\Commands\RescanLibrary;
 use App\Console\Commands\RescanRssFeeds;
+use App\Console\Commands\StartDownload;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -16,7 +17,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         RescanLibrary::class,
-        RescanRssFeeds::class
+        RescanRssFeeds::class,
+        StartDownload::class
     ];
 
     /**
@@ -29,6 +31,7 @@ class Kernel extends ConsoleKernel
     {
          $schedule->command('app:rescan-library')->daily();
          $schedule->command('app:rescan-rss-feeds')->everyThirtyMinutes();
+        $schedule->command('app:start-download')->everyMinute();
     }
 
     /**
