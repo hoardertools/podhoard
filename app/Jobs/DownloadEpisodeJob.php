@@ -32,10 +32,11 @@ class DownloadEpisodeJob implements ShouldQueue
             try{
                 $download = file_get_contents($episode->download_url);
             }catch (\Exception $e){
-                unset($e);
+
                 \Log::error("Failed to download episode: " . $episode->id . PHP_EOL . "Error: " . $e->getMessage());
                 $episode->delete();
                 DownloadEpisodeJob::dispatch();
+                unset($e);
                 exit(-1);
             }
 
