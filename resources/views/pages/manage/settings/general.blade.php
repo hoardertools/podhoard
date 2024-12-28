@@ -118,6 +118,13 @@
 									</select>
 								</td>
 							</tr>
+							<tr class="highlight">
+								<td class="field">Custom User Agent</td>
+								<td class="">
+									<input type="text" class="form-text" name="CustomUserAgent" id="CustomUserAgent" value="{{old('CustomUserAgent') ?? \App\Setting::where("key", "=", "CustomUserAgent")->first()->value}}">
+								</td>
+							</tr>
+
 
 
 							<tr class="highlight">
