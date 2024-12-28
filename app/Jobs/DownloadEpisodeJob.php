@@ -48,7 +48,7 @@ class DownloadEpisodeJob implements ShouldQueue
                 $episode->path = $podcast->path . "/" . \Illuminate\Support\Str::slug($episode->title) . "." . $episode->id . ".mp3";
                 chmod($episode->path , 0755);
 
-                $episode->save();
+                $episode->delete();
             }
 
             RefreshPodcastJob::dispatch($podcast);
