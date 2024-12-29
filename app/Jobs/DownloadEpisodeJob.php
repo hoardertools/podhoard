@@ -53,15 +53,14 @@ class DownloadEpisodeJob implements ShouldQueue
             }
 
             $podcast = Podcast::findOrFail($episode->podcast_id);
-
-            if(!\Storage::disk('base')->exists($this->sanitizeFileName($podcast->path))){
-                \Storage::disk('base')->makeDirectory($this->sanitizeFileName($podcast->path));
-                chmod($this->sanitizeFileName($podcast->path) , 0755);
+            if(!\Storage::disk('base')->exists($podcast->path)){
+                \Storage::disk('base')->makeDirectory($podcast->path);
+                chmod($podcast->path , 0755);
             }
 
-            if(\Storage::disk('base')->put($this->sanitizeFileName($podcast->path) . "/" . \Illuminate\Support\Str::slug($episode->title) . "." . $episode->id . ".mp3", $download)){
+            if(\Storage::disk('base')->put($podcast->path . "/" . \Illuminate\Support\Str::slug($episode->title) . "." . $episode->id . ".mp3", $download)){
                 $episode->downloaded = true;
-                $episode->path = $this->sanitizeFileName($podcast->path) . "/" . \Illuminate\Support\Str::slug($episode->title) . "." . $episode->id . ".mp3";
+                $episode->path = $podcast->path . "/" . \Illuminate\Support\Str::slug($episode->title) . "." . $episode->id . ".mp3";
                 chmod($episode->path , 0755);
 
 
