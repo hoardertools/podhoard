@@ -47,7 +47,7 @@ class DownloadEpisodeJob implements ShouldQueue
 
                 \Log::error("Failed to download episode: " . $episode->id . PHP_EOL . "Error: " . $e->getMessage());
                 $episode->delete();
-                DownloadEpisodeJob::dispatch();
+                DownloadEpisodeJob::dispatch()->onQueue("downloads");
                 unset($e);
                 exit(-1);
             }
