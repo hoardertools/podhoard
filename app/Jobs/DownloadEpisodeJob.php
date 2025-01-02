@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Directory;
 use App\Download;
+use App\DownloadLog;
 use App\Episode;
 use App\Managers\EpisodeManager;
 use App\Managers\PodcastManager;
@@ -28,6 +29,12 @@ class DownloadEpisodeJob implements ShouldQueue
     {
         if(Download::orderBy("created_at", "ASC")->exists()){
 
+            if(!$this->globalRateLimitExceeded()){
+                \Log::warning("Global download rate limit exceeded, waiting 5 seconds before trying again");
+                sleep(5);
+                DownloadEpisodeJob::dispatch()->onQueue("downloads");
+                return;
+            }
             $episode = Download::orderBy("created_at", "ASC")->first();
 
             try{
@@ -46,6 +53,14 @@ class DownloadEpisodeJob implements ShouldQueue
             }catch (\Exception $e){
 
                 \Log::error("Failed to download episode: " . $episode->id . PHP_EOL . "Error: " . $e->getMessage());
+                $dl = new DownloadLog();
+                $dl->download_id = $episode->id;
+                $dl->error = true;
+                $dl->downloaded = false;
+                $dl->download_url = $episode->download_url;
+                $dl->download_host = parse_url($episode->download_url, PHP_URL_HOST);
+                $dl->save();
+                unset($dl);
                 $episode->delete();
                 DownloadEpisodeJob::dispatch()->onQueue("downloads");
                 unset($e);
@@ -77,20 +92,41 @@ class DownloadEpisodeJob implements ShouldQueue
                 $newEpisode->guid = $episode->guid;
                 $newEpisode->save();
 
+                $dl = new DownloadLog();
+                $dl->download_id = $episode->id;
+                $dl->error = false;
+                $dl->downloaded = true;
+                $dl->download_url = $episode->download_url;
+                $dl->download_host = parse_url($episode->download_url, PHP_URL_HOST);
+                $dl->save();
+                unset($dl);
+
                 $meta = new EpisodeManager($newEpisode);
                 $meta->setMetaData();
 
                 $podcastManager = new PodcastManager($podcast);
                 $podcastManager->refresh();
 
+
                 $episode->delete();
             }
-
-
 
             DownloadEpisodeJob::dispatch()->onQueue("downloads");
 
         }
+    }
+
+    public function globalRateLimitExceeded(): bool
+    {
+        $downloads = DownloadLog::where("created_at", ">=", \Carbon\Carbon::now()->subSeconds(60))->count();
+        $maxDownloads = Setting::where("key", "GlobalDownloaderRateLimit")->first()->value;
+        if($maxDownloads === 0){
+            return false;
+        }
+        if($downloads >= $maxDownloads){
+            return true;
+        }
+        return false;
     }
 
     function sanitizeFileName(string $name, int $maxLength = 255): string
