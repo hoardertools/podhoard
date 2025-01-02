@@ -49,7 +49,7 @@ class DownloadEpisodeJob implements ShouldQueue
                 $episode->delete();
                 DownloadEpisodeJob::dispatch()->onQueue("downloads");
                 unset($e);
-                exit(-1);
+                return;
             }
 
             $podcast = Podcast::findOrFail($episode->podcast_id);
