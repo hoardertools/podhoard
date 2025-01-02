@@ -125,10 +125,17 @@
 								</td>
 							</tr>
 							<tr>
-								<td class="field">Downloader Rate Limit</td>
+								<td class="field">Downloader Rate Limit (Global)</td>
 								<td class="">
 									<input type="text" class="form-text" name="GlobalDownloaderRateLimit" id="GlobalDownloaderRateLimit" value="{{old('GlobalDownloaderRateLimit') ?? \App\Setting::where("key", "=", "GlobalDownloaderRateLimit")->first()->value}}">
 									<small>Fill in a per-minute maximum number of downloads the system will perform. 0 means unlimited.</small>
+								</td>
+							</tr>
+							<tr>
+								<td class="field">Downloader Rate Limit (Per Host)</td>
+								<td class="">
+									<input type="text" class="form-text" name="PerHostDownloaderRateLimit" id="PerHostDownloaderRateLimit" value="{{old('PerHostDownloaderRateLimit') ?? \App\Setting::where("key", "=", "PerHostDownloaderRateLimit")->first()->value}}">
+									<small>Fill in a per-minute maximum number of downloads the system will perform per given host. 0 means unlimited.</small>
 								</td>
 							</tr>
 

@@ -47,6 +47,12 @@ class create_global_permissionsSeeder extends Seeder
             $setting->value = 0;
             $setting->save();
         }
+        if(!Setting::where("key", "PerHostDownloaderRateLimit")->exists()){
+            $setting = new Setting();
+            $setting->key = "PerHostDownloaderRateLimit";
+            $setting->value = 0;
+            $setting->save();
+        }
 
     }
 }
