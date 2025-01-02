@@ -37,6 +37,13 @@ class DownloadEpisodeJob implements ShouldQueue
             }
             $episode = Download::orderBy("created_at", "ASC")->first();
 
+            if(!$this->perHostRateLimitExceeded(parse_url($episode->download_url, PHP_URL_HOST))){
+                \Log::warning("Per-host download rate limit exceeded, waiting 5 seconds before trying again");
+                sleep(5);
+                DownloadEpisodeJob::dispatch()->onQueue("downloads");
+                return;
+            }
+
             try{
                 if(Setting::where("key", "CustomUserAgent")->where("value", "!=", "")->exists()){
                     $opts = [
@@ -127,6 +134,20 @@ class DownloadEpisodeJob implements ShouldQueue
             return true;
         }
         return false;
+    }
+
+    public function perHostRateLimitExceeded(string $host): bool
+    {
+        $downloads = DownloadLog::where("created_at", ">=", \Carbon\Carbon::now()->subSeconds(60))->where("download_host", "=", $host)->count();
+        $maxDownloads = Setting::where("key", "PerHostDownloaderRateLimit")->first()->value;
+        if($maxDownloads === 0){
+            return false;
+        }
+        if($downloads >= $maxDownloads){
+            return true;
+        }
+        return false;
+
     }
 
     function sanitizeFileName(string $name, int $maxLength = 255): string
