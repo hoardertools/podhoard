@@ -40,7 +40,7 @@ class DirectoryManager
                     $podcast->directory_id = $this->directory->id;
                     $podcast->library_id = $this->directory->library_id;
                     $podcast->save();
-                    Log::log("Podcast added: " . $podcast->name, "info", "Directory Scan");
+                    Log::log("Podcast added: " . $podcast->name, "Directory Scan", "info");
                     RefreshPodcastJob::dispatch($podcast);
                 }else {
                     $podcast = Podcast::where("path", "=", $subdirectoryPath)->get();

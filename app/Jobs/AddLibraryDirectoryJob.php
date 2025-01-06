@@ -24,7 +24,7 @@ class AddLibraryDirectoryJob implements ShouldQueue
     public function handle(): void
     {
         $libraryManager = new LibraryManager($this->library);
-        Log::log("Rescanning directory: " . $this->directory->path, "info", "Directory Refresh");
+        Log::log("Rescanning directory: " . $this->directory->path, "Directory Refresh", "info");
         $libraryManager->rescanSingleDirectory($this->directory);
         unset($libraryManager);
     }

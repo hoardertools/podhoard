@@ -47,7 +47,7 @@ class RefreshRssJob implements ShouldQueue
                     $download->duration = 0;
                     $download->filesize = 0;
 
-                    Log::log("New episode found: " . $download->title . " for podcast " . $this->podcast->title, "info", "RSS Rescan");
+                    Log::log("New episode found: " . $download->title . " for podcast " . $this->podcast->title, "RSS Rescan", "info");
                     $download->save();
                 }
 

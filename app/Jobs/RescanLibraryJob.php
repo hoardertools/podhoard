@@ -22,7 +22,7 @@ class RescanLibraryJob implements ShouldQueue
     public function handle(): void
     {
         $libraryManager = new LibraryManager($this->library);
-        Log::log("Rescanning Library: " . $this->library->name, "info", "Library Refresh");
+        Log::log("Rescanning Library: " . $this->library->name, "Library Refresh", "info");
         $libraryManager->rescanLibrary();
         unset($libraryManager);
 

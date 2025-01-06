@@ -60,7 +60,7 @@ class SetInitialMetaDataJob implements ShouldQueue
             return;
         }
 
-        Log::log("Finished setting metadata for library: " . $this->library->id, "info", "Set Metadata");
+        Log::log("Finished setting metadata for library: " . $this->library->id, "Set Metadata", "info");
         foreach($this->library->podcasts()->get() as $podcast) {
 
             $podcastManager = new PodcastManager($podcast);

@@ -45,7 +45,7 @@ class EpisodeManager
                 return $episode;
             }else{
                 $episode->save();
-                Log::log("Episode added: " . $episode->name, "info", "Episode");
+                Log::log("Episode added: " . $episode->name,  "Episode", "info");
             }
 
         }

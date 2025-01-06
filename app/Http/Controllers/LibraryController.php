@@ -93,7 +93,7 @@ class LibraryController extends Controller
 
     public function refreshPodcast($slug, $podcastId){
         $podcast = Podcast::where("id", "=", $podcastId)->first();
-        Log::log("Refreshing podcast: " . $podcast->name, "info", "Podcast Refresh");
+        Log::log("Refreshing podcast: " . $podcast->name, "Podcast Refresh", "info");
         RefreshPodcastJob::dispatch($podcast);
         return redirect("/library/" . $slug . "/podcast/" . $podcastId)->with(["status" => "The podcast is being refreshed."]);
     }
@@ -254,9 +254,9 @@ class LibraryController extends Controller
             exit(-1);
         }
         $podcast->save();
-        Log::log("Added podcast: " . $podcast->name, "info", "Podcast Added");
+        Log::log("Added podcast: " . $podcast->name,  "Podcast Added", "info");
         RefreshRssJob::dispatch($podcast);
-        Log::log("Refreshing podcast: " . $podcast->name, "info", "Podcast Refresh");
+        Log::log("Refreshing podcast: " . $podcast->name,  "Podcast Refresh", "info");
         try{
             $channel = $poddle->getChannel();
             if($channel->image) {
