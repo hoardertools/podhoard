@@ -55,7 +55,7 @@
 		$('#data-table-default').DataTable({
 			responsive: true,
 			pageLength: 25,
-			order: [[2, 'desc']]
+			order: [[3, 'desc']]
 		});
 
 
