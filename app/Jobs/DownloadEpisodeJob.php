@@ -132,7 +132,7 @@ class DownloadEpisodeJob implements ShouldQueue
     {
         $downloads = DownloadLog::where("created_at", ">=", \Carbon\Carbon::now()->subSeconds(60))->count();
         $maxDownloads = Setting::where("key", "GlobalDownloaderRateLimit")->first()->value;
-        if($maxDownloads === 0){
+        if($maxDownloads == 0){
             return false;
         }
         if($downloads >= $maxDownloads){
@@ -145,7 +145,7 @@ class DownloadEpisodeJob implements ShouldQueue
     {
         $downloads = DownloadLog::where("created_at", ">=", \Carbon\Carbon::now()->subSeconds(60))->where("download_host", "=", $host)->count();
         $maxDownloads = Setting::where("key", "PerHostDownloaderRateLimit")->first()->value;
-        if($maxDownloads === 0){
+        if($maxDownloads == 0){
             return false;
         }
         if($downloads >= $maxDownloads){
