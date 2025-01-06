@@ -14,7 +14,14 @@ $menu = [
             'title' => 'Download Queue',
             'url' => '/downloadQueue',
             'route-name' => 'downloadQueue'
-        ]]
+        ],
+        [
+            'icon' => 'fa fa-notes-medical',
+            'title' => 'Log Center',
+            'url' => '/logCenter',
+            'route-name' => 'logCenter'
+        ]
+    ]
 ];
 
 

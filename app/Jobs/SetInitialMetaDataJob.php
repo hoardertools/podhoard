@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Episode;
 use App\Library;
+use App\Log;
 use App\Managers\EpisodeManager;
 use App\Managers\MetadataManager;
 use App\Managers\PodcastManager;
@@ -59,6 +60,7 @@ class SetInitialMetaDataJob implements ShouldQueue
             return;
         }
 
+        Log::log("Finished setting metadata for library: " . $this->library->id, "info", "Set Metadata");
         foreach($this->library->podcasts()->get() as $podcast) {
 
             $podcastManager = new PodcastManager($podcast);

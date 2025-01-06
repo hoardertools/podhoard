@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Jobs\RefreshRssJob;
+use App\Log;
 use App\Managers\PodcastManager;
 use App\Podcast;
 use Illuminate\Console\Command;
@@ -29,6 +30,7 @@ class RescanRssFeeds extends Command
     public function handle()
     {
         foreach(Podcast::whereNotNull('rssUrl')->get() as $podcast){
+            Log::log("Rescanning RSS feed: $podcast->name", "RSS Feed Rescan", "info" );
 
             RefreshRssJob::dispatch($podcast);
 

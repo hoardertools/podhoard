@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Directory;
 use App\Jobs\RescanLibraryJob;
 use App\Library;
+use App\Log;
 use Illuminate\Console\Command;
 
 class RescanLibrary extends Command
@@ -29,6 +30,7 @@ class RescanLibrary extends Command
     public function handle()
     {
         foreach(Library::get() as $library){
+            Log::log("Rescanning library: $library->name", "Library Rescan", "info" );
             RescanLibraryJob::dispatch($library);
         }
     }

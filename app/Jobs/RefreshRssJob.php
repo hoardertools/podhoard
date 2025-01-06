@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Download;
 use App\Episode;
+use App\Log;
 use App\Podcast;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -46,6 +47,7 @@ class RefreshRssJob implements ShouldQueue
                     $download->duration = 0;
                     $download->filesize = 0;
 
+                    Log::log("New episode found: " . $download->title . " for podcast " . $this->podcast->title, "info", "RSS Rescan");
                     $download->save();
                 }
 

@@ -7,6 +7,7 @@ use App\Jobs\AddNewPodcastJob;
 use App\Jobs\RefreshPodcastJob;
 use App\Jobs\RefreshRssJob;
 use App\Library;
+use App\Log;
 use App\Podcast;
 use App\Setting;
 use GoncziAkos\Podcast\Feed;
@@ -34,6 +35,7 @@ class LibraryController extends Controller
         }
 
         $library = Library::where("slug", $slug)->orderBy("name", "ASC")->first();
+
         return view('pages.library', [
             'library' => $library,
             'view' => $view
@@ -91,6 +93,7 @@ class LibraryController extends Controller
 
     public function refreshPodcast($slug, $podcastId){
         $podcast = Podcast::where("id", "=", $podcastId)->first();
+        Log::log("Refreshing podcast: " . $podcast->name, "info", "Podcast Refresh");
         RefreshPodcastJob::dispatch($podcast);
         return redirect("/library/" . $slug . "/podcast/" . $podcastId)->with(["status" => "The podcast is being refreshed."]);
     }
@@ -251,7 +254,9 @@ class LibraryController extends Controller
             exit(-1);
         }
         $podcast->save();
+        Log::log("Added podcast: " . $podcast->name, "info", "Podcast Added");
         RefreshRssJob::dispatch($podcast);
+        Log::log("Refreshing podcast: " . $podcast->name, "info", "Podcast Refresh");
         try{
             $channel = $poddle->getChannel();
             if($channel->image) {

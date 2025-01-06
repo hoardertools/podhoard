@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Library;
+use App\Log;
 use App\Managers\LibraryManager;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -21,6 +22,7 @@ class RescanLibraryJob implements ShouldQueue
     public function handle(): void
     {
         $libraryManager = new LibraryManager($this->library);
+        Log::log("Rescanning Library: " . $this->library->name, "info", "Library Refresh");
         $libraryManager->rescanLibrary();
         unset($libraryManager);
 

@@ -6,6 +6,7 @@ use App\Directory;
 use App\Episode;
 use App\Image;
 use App\Jobs\RefreshPodcastJob;
+use App\Log;
 use App\Metadata;
 use App\Podcast;
 
@@ -39,6 +40,7 @@ class DirectoryManager
                     $podcast->directory_id = $this->directory->id;
                     $podcast->library_id = $this->directory->library_id;
                     $podcast->save();
+                    Log::log("Podcast added: " . $podcast->name, "info", "Directory Scan");
                     RefreshPodcastJob::dispatch($podcast);
                 }else {
                     $podcast = Podcast::where("path", "=", $subdirectoryPath)->get();

@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('episodes', function (Blueprint $table) {
-            $table->string('download_url', 1024)->change();
+            $table->string('download_url', 1024)->nullable()->change();
         });
     }
 

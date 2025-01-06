@@ -6,6 +6,7 @@ use App\Directory;
 use App\Download;
 use App\DownloadLog;
 use App\Episode;
+use App\Log;
 use App\Managers\EpisodeManager;
 use App\Managers\PodcastManager;
 use App\Podcast;
@@ -31,6 +32,7 @@ class DownloadEpisodeJob implements ShouldQueue
 
             if(!$this->globalRateLimitExceeded()){
                 \Log::warning("Global download rate limit exceeded, waiting 5 seconds before trying again");
+                Log::log("Global download rate limit exceeded, waiting 5 seconds before trying again", "warning", "Episode Download");
                 sleep(5);
                 DownloadEpisodeJob::dispatch()->onQueue("downloads");
                 return;
@@ -39,6 +41,7 @@ class DownloadEpisodeJob implements ShouldQueue
 
             if(!$this->perHostRateLimitExceeded(parse_url($episode->download_url, PHP_URL_HOST))){
                 \Log::warning("Per-host download rate limit exceeded, waiting 5 seconds before trying again");
+                Log::log("Per-host download rate limit exceeded, waiting 5 seconds before trying again", "warning", "Episode Download");
                 sleep(5);
                 DownloadEpisodeJob::dispatch()->onQueue("downloads");
                 return;
@@ -60,6 +63,7 @@ class DownloadEpisodeJob implements ShouldQueue
             }catch (\Exception $e){
 
                 \Log::error("Failed to download episode: " . $episode->id . PHP_EOL . "Error: " . $e->getMessage());
+                Log::log("Failed to download episode: " . $episode->id . PHP_EOL . "Error: " . $e->getMessage(), "error", "Episode Download");
                 $dl = new DownloadLog();
                 $dl->download_id = $episode->id;
                 $dl->error = true;
@@ -99,6 +103,7 @@ class DownloadEpisodeJob implements ShouldQueue
                 $newEpisode->guid = $episode->guid;
                 $newEpisode->save();
 
+                Log::log("Downloaded episode: " . $episode->id . " from " . $episode->download_url . " to " . $episode->path, "info", "Episode Download");
                 $dl = new DownloadLog();
                 $dl->download_id = $episode->id;
                 $dl->error = false;

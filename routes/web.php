@@ -56,6 +56,8 @@ Route::middleware(['verifyReadPermissions'])->group(function () {
     Route::get('/profile', 'ProfileController@profile')->name('profile');
     Route::post('/profile', 'ProfileController@updateProfile');
 
+    Route::get('/logCenter', 'LogController@view')->name('logCenter');
+
     Route::get('/downloadQueue', 'MainController@downloadQueue')->name('downloadQueue');
 
 

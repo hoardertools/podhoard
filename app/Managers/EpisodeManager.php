@@ -3,6 +3,7 @@
 namespace App\Managers;
 
 use App\Episode;
+use App\Log;
 use App\Metadata;
 
 class EpisodeManager
@@ -44,6 +45,7 @@ class EpisodeManager
                 return $episode;
             }else{
                 $episode->save();
+                Log::log("Episode added: " . $episode->name, "info", "Episode");
             }
 
         }
