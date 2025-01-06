@@ -30,7 +30,7 @@ class DownloadEpisodeJob implements ShouldQueue
     {
         if(Download::orderBy("created_at", "ASC")->exists()){
 
-            if(!$this->globalRateLimitExceeded()){
+            if($this->globalRateLimitExceeded()){
                 \Log::warning("Global download rate limit exceeded, waiting 5 seconds before trying again");
                 Log::log("Global download rate limit exceeded, waiting 5 seconds before trying again", "Episode Download", "warning");
                 sleep(5);
@@ -39,7 +39,7 @@ class DownloadEpisodeJob implements ShouldQueue
             }
             $episode = Download::orderBy("created_at", "ASC")->first();
 
-            if(!$this->perHostRateLimitExceeded(parse_url($episode->download_url, PHP_URL_HOST))){
+            if($this->perHostRateLimitExceeded(parse_url($episode->download_url, PHP_URL_HOST))){
                 \Log::warning("Per-host download rate limit exceeded, waiting 5 seconds before trying again");
                 Log::log("Per-host download rate limit exceeded, waiting 5 seconds before trying again", "Episode Download", "warning" );
                 sleep(5);
