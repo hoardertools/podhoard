@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use http\Client\Curl\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
@@ -27,7 +28,7 @@ class ProfileController extends Controller
         $user->email = $request->email;
 
         if(!empty($request->password)){
-            $user->password = \Hash::make($request->password);
+            $user->password = Hash::make($request->password);
         }
 
         $user->save();
