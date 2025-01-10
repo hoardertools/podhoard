@@ -107,7 +107,7 @@ Route::middleware(['verifyWritePermissions'])->group(function () {
     Route::post('/manage/libraries/{slug}/updateName', 'ManageLibrariesController@updateName');
     Route::post('/manage/libraries/{slug}/addDirectory', 'ManageLibrariesController@addDirectory');
     Route::get('/manage/libraries/{slug}/removeDirectoryPath/{path}', 'ManageLibrariesController@removeDirectoryPath');
-    Route::get('/manage/users/{id}/delete', 'ManageUsersController@destroy');
+    Route::get('/manage/users/{user}/delete', 'ManageUsersController@destroy');
         Route::resource('/manage/users', 'ManageUsersController');
     Route::get('/library/{slug}/createPodcast', 'LibraryController@createPodcast');
     Route::post('/library/{slug}/createPodcast', 'LibraryController@createPodcastPost');

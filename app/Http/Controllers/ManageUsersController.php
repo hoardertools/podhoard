@@ -49,7 +49,7 @@ class ManageUsersController extends Controller
         }
 
         $user->save();
-        redirect('/manage/users')->with('success', 'User created successfully');
+        return redirect('/manage/users')->with('success', 'User created successfully');
     }
 
     public function show(User $user)
@@ -94,6 +94,6 @@ class ManageUsersController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        return redirect()->route('manage.users.index')->with('success', 'User deleted successfully');
+        return redirect('/manage/users')->with('success', 'User deleted successfully');
     }
 }
