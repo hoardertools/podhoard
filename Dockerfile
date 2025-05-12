@@ -58,8 +58,6 @@ RUN sed -i \
         /usr/local/etc/php-fpm.d/www.conf
 
 RUN cd /podhoard; php composer.phar install \
-  # Set permissions
-  && chown -R www-data:www-data /podhoard \
   # Cleanup
   && apt-get autoremove -y \
   && apt-get clean \
